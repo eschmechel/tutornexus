@@ -87,13 +87,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run pnpm audit
-        run: pnpm --filter @tutornexus/docs run audit:security || true
+        run: pnpm audit --prod || true
 
       - name: Run CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: javascript-typescript
-        continue-on-error: true
+          setup-python-dependencies: false
 
       - name: Build (for CodeQL)
         run: pnpm --filter @tutornexus/docs run build || true
