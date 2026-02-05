@@ -1,0 +1,384 @@
+/**
+ * Tutor Nexus - Clean, Uniform Theme
+ * Solid colors, no gradients, consistent design
+ */
+
+/* ============================================
+   CSS Custom Properties
+   ============================================ */
+
+:root {
+  /* Primary - Violet */
+  --ifm-color-primary: #8b5cf6;
+  --ifm-color-primary-dark: #7c3aed;
+  --ifm-color-primary-darker: #6d28d9;
+  --ifm-color-primary-darkest: #5b21b6;
+  --ifm-color-primary-light: #a78bfa;
+  --ifm-color-primary-lighter: #c4b5fd;
+  --ifm-color-primary-lightest: #ddd6fe;
+
+  /* Backgrounds */
+  --tn-bg-dark: #0a0a0f;
+  --tn-bg-card: #12121a;
+  --tn-bg-elevated: #1a1a24;
+
+  /* Text */
+  --tn-text-primary: #f8fafc;
+  --tn-text-secondary: #94a3b8;
+  --tn-text-muted: #64748b;
+
+  /* Borders */
+  --tn-border: rgba(148, 163, 184, 0.1);
+  --tn-border-hover: rgba(139, 92, 246, 0.5);
+
+  /* Glass (subtle, no blur effects) */
+  --tn-glass-bg: rgba(255, 255, 255, 0.03);
+  --tn-glass-border: rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --ifm-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --ifm-heading-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ifm-heading-font-weight: 700;
+
+  /* Code */
+  --ifm-code-font-size: 90%;
+  --docusaurus-highlighted-code-line-bg: rgba(139, 92, 246, 0.15);
+
+  /* Spacing */
+  --ifm-spacing-horizontal: 1.5rem;
+  --ifm-navbar-height: 4rem;
+
+  /* Border radius */
+  --ifm-border-radius: 0.75rem;
+  --tn-radius-sm: 0.5rem;
+  --tn-radius-lg: 1rem;
+  --tn-radius-xl: 1.5rem;
+}
+
+/* ============================================
+   Dark Theme (Default)
+   ============================================ */
+
+[data-theme='dark'] {
+  --ifm-color-primary: #a78bfa;
+  --ifm-color-primary-dark: #8b5cf6;
+  --ifm-color-primary-darker: #7c3aed;
+  --ifm-color-primary-darkest: #6d28d9;
+  --ifm-color-primary-light: #c4b5fd;
+  --ifm-color-primary-lighter: #ddd6fe;
+  --ifm-color-primary-lightest: #ede9fe;
+
+  --ifm-background-color: var(--tn-bg-dark);
+  --ifm-background-surface-color: var(--tn-bg-card);
+  --ifm-navbar-background-color: rgba(10, 10, 15, 0.95);
+  --ifm-footer-background-color: var(--tn-bg-dark);
+
+  --ifm-font-color-base: var(--tn-text-primary);
+  --ifm-font-color-secondary: var(--tn-text-secondary);
+
+  --docusaurus-highlighted-code-line-bg: rgba(139, 92, 246, 0.2);
+}
+
+/* ============================================
+   Light Theme
+   ============================================ */
+
+[data-theme='light'] {
+  --ifm-color-primary: #7c3aed;
+  --ifm-color-primary-dark: #6d28d9;
+  --ifm-color-primary-darker: #5b21b6;
+  --ifm-color-primary-darkest: #4c1d95;
+  --ifm-color-primary-light: #8b5cf6;
+  --ifm-color-primary-lighter: #a78bfa;
+  --ifm-color-primary-lightest: #c4b5fd;
+
+  --tn-bg-dark: #ffffff;
+  --tn-bg-card: #f8fafc;
+  --tn-bg-elevated: #f1f5f9;
+  --tn-text-primary: #0f172a;
+  --tn-text-secondary: #475569;
+  --tn-text-muted: #64748b;
+  --tn-border: rgba(15, 23, 42, 0.1);
+  --tn-glass-bg: rgba(0, 0, 0, 0.02);
+  --tn-glass-border: rgba(0, 0, 0, 0.05);
+
+  --docusaurus-highlighted-code-line-bg: rgba(139, 92, 246, 0.1);
+}
+
+/* ============================================
+   Global Styles
+   ============================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-feature-settings: 'liga', 'kern';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Navbar
+   ============================================ */
+
+.navbar {
+  border-bottom: 1px solid var(--tn-border);
+  box-shadow: none;
+}
+
+.navbar__title {
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+}
+
+.navbar__link {
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.navbar__link:hover {
+  color: var(--ifm-color-primary-light);
+}
+
+.navbar__link--active {
+  color: var(--ifm-color-primary);
+}
+
+/* ============================================
+   Sidebar
+   ============================================ */
+
+.menu {
+  background: transparent;
+}
+
+.menu__link {
+  border-radius: var(--tn-radius-sm);
+  transition: all 0.2s ease;
+}
+
+.menu__link:hover {
+  background: var(--tn-glass-bg);
+  color: var(--ifm-color-primary-light);
+}
+
+.menu__link--active {
+  background: rgba(139, 92, 246, 0.1);
+  border-left: 3px solid var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+.menu__list-item-collapsible:hover {
+  background: var(--tn-glass-bg);
+}
+
+/* ============================================
+   Content
+   ============================================ */
+
+.markdown h1 {
+  font-size: 2.5rem;
+  color: var(--ifm-color-primary);
+}
+
+.markdown h2 {
+  border-bottom: 1px solid var(--tn-border);
+  padding-bottom: 0.5rem;
+}
+
+.markdown a {
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.markdown a:hover {
+  border-bottom-color: var(--ifm-color-primary);
+}
+
+/* Code blocks */
+.prism-code {
+  border-radius: var(--tn-radius-lg);
+  border: 1px solid var(--tn-border);
+}
+
+code {
+  border-radius: var(--tn-radius-sm);
+  padding: 0.15rem 0.4rem;
+  background: var(--tn-glass-bg);
+  border: 1px solid var(--tn-border);
+}
+
+/* ============================================
+   Cards & Admonitions
+   ============================================ */
+
+.alert {
+  border-radius: var(--tn-radius-lg);
+  border: 1px solid var(--tn-border);
+}
+
+.card {
+  background: var(--tn-bg-card);
+  border: 1px solid var(--tn-border);
+  border-radius: var(--tn-radius-lg);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--tn-border-hover);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   Table of Contents
+   ============================================ */
+
+.table-of-contents__link {
+  transition: color 0.2s ease;
+}
+
+.table-of-contents__link:hover {
+  color: var(--ifm-color-primary-light);
+}
+
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+.footer {
+  border-top: 1px solid var(--tn-border);
+}
+
+.footer__title {
+  color: var(--ifm-color-primary-light);
+  font-weight: 600;
+}
+
+.footer__link-item {
+  transition: color 0.2s ease;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary-light);
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.button {
+  border-radius: var(--tn-radius-sm);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.button--primary {
+  background: var(--ifm-color-primary);
+  border: none;
+}
+
+.button--primary:hover {
+  background: var(--ifm-color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.button--secondary {
+  background: var(--tn-glass-bg);
+  border: 1px solid var(--tn-border);
+  color: var(--tn-text-primary);
+}
+
+.button--secondary:hover {
+  background: var(--tn-bg-elevated);
+  border-color: var(--tn-border-hover);
+  color: var(--ifm-color-primary-light);
+}
+
+/* ============================================
+   Search
+   ============================================ */
+
+.DocSearch-Button {
+  border-radius: var(--tn-radius-sm) !important;
+  background: var(--tn-glass-bg) !important;
+  border: 1px solid var(--tn-border) !important;
+}
+
+.DocSearch-Button:hover {
+  border-color: var(--tn-border-hover) !important;
+}
+
+/* ============================================
+   Pagination
+   ============================================ */
+
+.pagination-nav__link {
+  border: 1px solid var(--tn-border);
+  border-radius: var(--tn-radius-lg);
+  transition: all 0.2s ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--tn-border-hover);
+  background: var(--tn-glass-bg);
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--tn-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tn-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-primary);
+}
+
+/* ============================================
+   Selection
+   ============================================ */
+
+::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: var(--tn-text-primary);
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+
+@media (max-width: 996px) {
+  .markdown h1 {
+    font-size: 2rem;
+  }
+
+  :root {
+    --ifm-spacing-horizontal: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 1rem;
+  }
+}

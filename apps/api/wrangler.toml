@@ -1,0 +1,68 @@
+name = "tutor-nexus-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[build]
+command = "pnpm install && pnpm --filter api build"
+
+[vars]
+ENVIRONMENT = "development"
+
+# Development environment (default)
+[env.development]
+name = "tutor-nexus-api-dev"
+
+# Production environment
+[env.production]
+name = "tutor-nexus-api"
+
+# Preview environment
+[env.preview]
+name = "tutor-nexus-api-preview"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tn-sessions"
+database_id = "${TN_SESSIONS_DB_ID}"
+preview_id = "${TN_SESSIONS_PREVIEW_ID}"
+
+[[d1_databases]]
+binding = "COURSES_DB"
+database_name = "tn-courses"
+database_id = "${TN_COURSES_DB_ID}"
+preview_id = "${TN_COURSES_PREVIEW_ID}"
+
+[[d1_databases]]
+binding = "TRANSFERS_DB"
+database_name = "tn-transfers"
+database_id = "${TN_TRANSFERS_DB_ID}"
+preview_id = "${TN_TRANSFERS_PREVIEW_ID}"
+
+[[durable_objects.bindings]]
+name = "SESSIONS"
+class_name = "SessionDO"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["SessionDO"]
+
+[[queues]]
+binding = "QUEUE"
+queue_name = "tutornexus-jobs"
+
+[[r2_buckets]]
+binding = "ARTIFACTS"
+bucket_name = "tutornexus-artifacts"
+
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "tutornexus-embeddings"
+
+[triggers]
+crons = [
+  "0 * * * *",           # Hourly: Check for expired sessions
+  "0 0 * * *",           # Daily: Quota reset at midnight UTC
+  "0 3 * * *",           # Daily: Cleanup old sessions
+  "0 4 * * 0",           # Weekly: Generate AI summaries
+]

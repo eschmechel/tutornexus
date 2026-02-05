@@ -1,0 +1,153 @@
+name: Security
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly scan on Sunday
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  pnpm-audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '9'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          SKIP_METAFILE: 'true'
+
+      - name: Run pnpm audit
+        id: audit
+        run: |
+          if pnpm audit --prod --severity=moderate 2>/dev/null; then
+            echo "audit_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "audit_passed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload audit results
+        if: always() && steps.audit.outputs.audit_passed == 'false'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: pnpm-audit.sarif
+          category: 'pnpm-audit'
+
+      - name: Fail on high/critical vulnerabilities
+        if: steps.audit.outputs.audit_passed == 'false'
+        run: |
+          echo "::warning::Dependency audit found issues. Review the results above."
+          exit 1
+
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '9'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+
+      - name: Build
+        run: pnpm build || true
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:javascript-typescript'
+          upload: always
+
+  secrets-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        continue-on-error: true
+        with:
+          repository: ''
+          base: main
+          head: HEAD
+          extra_args: --json --exit
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          comment-summary-in-pr: on-failure
+          fail-on-severity: high
+          license-check: true
+          vulnerability-check: true
+
+  scorecard:
+    name: Security Scorecard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Scorecard
+        uses: ossf/scorecard-action@main
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Upload Scorecard results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+          category: scorecard

@@ -1,0 +1,10 @@
+packages:
+  # TypeScript workspaces (managed by pnpm)
+  - 'docs'
+  - 'packages/*'
+  - 'apps/*'
+
+# Note: The following are separate subtrees with own package managers:
+# - services/mcp/    (Go - separate go.mod)
+# - tools/cli/        (Rust - separate Cargo.toml)
+# - services/adapters/ (Cloudflare Workers - managed separately)
