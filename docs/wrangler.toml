@@ -1,0 +1,10 @@
+name = "tutornexus-docs"
+compatibility_date = "2025-02-05"
+pages_build_output_dir = "build"
+
+[vars]
+NODE_VERSION = "20"
+
+[environment]
+preview = "docs.staging.tutornexus.dev"
+production = "docs.tutornexus.dev"
