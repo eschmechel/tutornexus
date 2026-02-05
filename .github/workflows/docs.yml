@@ -90,16 +90,15 @@ jobs:
         run: cd docs && pnpm audit --prod || true
 
       - name: Run CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: javascript-typescript
-          setup-python-dependencies: false
 
       - name: Build
         run: cd docs && pnpm build
 
       - name: CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: '/language:javascript-typescript'
         continue-on-error: true
@@ -149,15 +148,13 @@ jobs:
           path: dist
 
       - name: Deploy to Cloudflare Pages
+        id: deploy
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: tutornexus-docs
           directory: dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerConfigPath: docs/wrangler.toml
-          environmentName: staging
 
   deploy-production:
     name: Deploy Production
@@ -181,9 +178,6 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: tutornexus-docs
           directory: dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerConfigPath: docs/wrangler.toml
-          environmentName: production
 
   preview:
     name: Preview Deployment
@@ -210,15 +204,13 @@ jobs:
         run: cd docs && pnpm build
 
       - name: Deploy Preview to Cloudflare Pages
+        id: deploy
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: tutornexus-docs
           directory: docs/build
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerConfigPath: docs/wrangler.toml
-          environmentName: preview-${{ github.run_id }}
 
       - name: Comment PR with Preview URL
         uses: actions/github-script@v7
