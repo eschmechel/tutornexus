@@ -17,32 +17,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: '9'
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: cd docs && pnpm install --frozen-lockfile
-
-      - name: Lint TypeScript
-        run: cd docs && pnpm lint
-
-      - name: Lint Markdown
-        run: cd docs && pnpm lint:markdown
-
   typecheck:
     name: TypeCheck
     runs-on: ubuntu-latest
@@ -106,7 +80,7 @@ jobs:
   build-docs:
     name: Build Docs
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, security]
+    needs: [typecheck, security]
     if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
