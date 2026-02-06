@@ -24,7 +24,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@fe02b34f77f8bc70378873a86cdaa32063b1a3b6 # v4.0.0
+        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
         with:
           version: '9'
 
@@ -56,7 +56,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@fe02b34f77f8bc70378873a86cdaa32063b1a3b6 # v4.0.0
+        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
         with:
           version: '9'
 
@@ -97,7 +97,7 @@ jobs:
           fetch-depth: 0
 
       - name: TruffleHog
-        uses: trufflesecurity/trufflehog@d2499e891f2d4a11f3ef6fb9386dc07e2489285d # v3.88.23
+        uses: trufflesecurity/trufflehog@690e5c7aff8347c3885096f3962a0633d9129607 # v3.88.23
         with:
           extra_args: --results=verified,unknown
 
