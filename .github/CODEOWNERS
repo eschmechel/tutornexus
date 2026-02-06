@@ -1,0 +1,22 @@
+# Code Owners for Tutor Nexus
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global fallback - require review from main maintainer
+* @eschmechel
+
+# Documentation
+/docs/ @eschmechel
+
+# API changes
+/apps/api/ @eschmechel
+
+# Web app changes
+/apps/web/ @eschmechel
+
+# CI/CD workflows
+/.github/workflows/ @eschmechel
+
+# Security-critical files
+/.well-known/security.txt @eschmechel
+LICENSE @eschmechel
+LICENSE-COMMERCIAL @eschmechel

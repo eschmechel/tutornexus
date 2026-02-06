@@ -1,0 +1,14 @@
+# Security Policy for Tutor Nexus
+# https://securitytxt.org/ | RFC 9116
+
+Contact: mailto:security@tutor-nexus.com
+Expires: 2027-02-06T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://tutor-nexus.com/.well-known/security.txt
+Policy: https://tutor-nexus.com/security-policy
+
+# Acknowledgments page will be added when we have reports to acknowledge
+# Acknowledgments: https://tutor-nexus.com/security/acknowledgments
+
+# PGP key will be added when available
+# Encryption: https://tutor-nexus.com/.well-known/pgp-key.txt

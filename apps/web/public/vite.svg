@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background rounded square -->
+  <rect x="0" y="0" width="32" height="32" rx="6" fill="#8b5cf6"/>
+  
+  <!-- T letter -->
+  <g fill="#1e1b4b">
+    <rect x="4" y="10" width="11" height="3" rx="1"/>
+    <rect x="8" y="10" width="3" height="14" rx="1"/>
+  </g>
+  
+  <!-- N letter -->
+  <g fill="#1e1b4b">
+    <rect x="19" y="10" width="3" height="14" rx="1"/>
+    <rect x="26" y="10" width="3" height="14" rx="1"/>
+    <polygon points="19,10 22,10 29,24 26,24"/>
+  </g>
+  
+  <!-- Steps accent (bottom) -->
+  <rect x="4" y="26" width="24" height="2" rx="1" fill="#1e1b4b" opacity="0.4"/>
+</svg>
