@@ -29,7 +29,7 @@ jobs:
           version: '9'
 
       - name: Setup Node.js
-        uses: actions/setup-node@1d0ff469f7db7f3c9d0fe0220e99647872cb7b90 # v4.2.0
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -61,7 +61,7 @@ jobs:
           version: '9'
 
       - name: Setup Node.js
-        uses: actions/setup-node@1d0ff469f7db7f3c9d0fe0220e99647872cb7b90 # v4.2.0
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -70,7 +70,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@17a1c3c8fcebebe3c9ec9db12cb54b9c03ec3c1a # v3.28.9
+        uses: github/codeql-action/init@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0 # v3.28.9
         with:
           languages: javascript-typescript
           queries: security-extended
@@ -79,7 +79,7 @@ jobs:
         run: pnpm build
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@17a1c3c8fcebebe3c9ec9db12cb54b9c03ec3c1a # v3.28.9
+        uses: github/codeql-action/analyze@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0 # v3.28.9
         with:
           category: '/language:javascript-typescript'
           upload: always
@@ -115,7 +115,7 @@ jobs:
           persist-credentials: false
 
       - name: Dependency Review
-        uses: actions/dependency-review-action@3b139cfc5fae8b618d3eae3675e383bb1769c019 # v4.3.0
+        uses: actions/dependency-review-action@e58c696e52cac8e62d61cc21fda89565d71505d7 # v4.3.0
         with:
           comment-summary-in-pr: on-failure
           fail-on-severity: high
@@ -137,14 +137,14 @@ jobs:
           persist-credentials: false
 
       - name: Run Scorecard
-        uses: ossf/scorecard-action@f49ababe0f0e0c6f77ff39a5d50a13e41d50afca # v2.4.1
+        uses: ossf/scorecard-action@f49aabe0b5af0936a0987cfb85d86b75731b0186 # v2.4.1
         with:
           results_file: results.sarif
           results_format: sarif
           publish_results: true
 
       - name: Upload Scorecard results
-        uses: github/codeql-action/upload-sarif@17a1c3c8fcebebe3c9ec9db12cb54b9c03ec3c1a # v3.28.9
+        uses: github/codeql-action/upload-sarif@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0 # v3.28.9
         with:
           sarif_file: results.sarif
           category: scorecard
