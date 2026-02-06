@@ -9,26 +9,27 @@ on:
     - cron: '0 0 * * 0'  # Weekly scan on Sunday
   workflow_dispatch:
 
-permissions:
-  actions: read
-  contents: read
-  security-events: write
+permissions: {}
 
 jobs:
   pnpm-audit:
     name: Dependency Audit
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@fe02b34f77f8bc70378873a86cdaa32063b1a3b6 # v4.0.0
         with:
           version: '9'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1d0ff469f7db7f3c9d0fe0220e99647872cb7b90 # v4.2.0
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -39,19 +40,7 @@ jobs:
           SKIP_METAFILE: 'true'
 
       - name: Run pnpm audit
-        id: audit
-        run: |
-          if pnpm audit --prod 2>/dev/null; then
-            echo "audit_passed=true" >> $GITHUB_OUTPUT
-          else
-            echo "audit_passed=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Fail on high/critical vulnerabilities
-        if: steps.audit.outputs.audit_passed == 'false'
-        run: |
-          echo "::warning::Dependency audit found issues. Review the results above."
-          exit 1
+        run: pnpm audit --prod --audit-level=critical
 
   codeql:
     name: CodeQL Analysis
@@ -62,15 +51,17 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@fe02b34f77f8bc70378873a86cdaa32063b1a3b6 # v4.0.0
         with:
           version: '9'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1d0ff469f7db7f3c9d0fe0220e99647872cb7b90 # v4.2.0
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -79,16 +70,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@17a1c3c8fcebebe3c9ec9db12cb54b9c03ec3c1a # v3.28.9
         with:
           languages: javascript-typescript
           queries: security-extended
 
       - name: Build
-        run: pnpm build || true
+        run: pnpm build
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@17a1c3c8fcebebe3c9ec9db12cb54b9c03ec3c1a # v3.28.9
         with:
           category: '/language:javascript-typescript'
           upload: always
@@ -96,29 +87,35 @@ jobs:
   secrets-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: TruffleHog
-        uses: trufflesecurity/trufflehog@main
-        continue-on-error: true
+        uses: trufflesecurity/trufflehog@d2499e891f2d4a11f3ef6fb9386dc07e2489285d # v3.88.23
         with:
-          repository: ''
-          base: main
-          head: HEAD
-          extra_args: --json --exit
+          extra_args: --results=verified,unknown
 
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Dependency Review
-        uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@3b139cfc5fae8b618d3eae3675e383bb1769c019 # v4.3.0
         with:
           comment-summary-in-pr: on-failure
           fail-on-severity: high
@@ -128,19 +125,26 @@ jobs:
   scorecard:
     name: Security Scorecard
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      actions: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Run Scorecard
-        uses: ossf/scorecard-action@main
+        uses: ossf/scorecard-action@f49ababe0f0e0c6f77ff39a5d50a13e41d50afca # v2.4.1
         with:
           results_file: results.sarif
           results_format: sarif
           publish_results: true
 
       - name: Upload Scorecard results
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@17a1c3c8fcebebe3c9ec9db12cb54b9c03ec3c1a # v3.28.9
         with:
           sarif_file: results.sarif
           category: scorecard

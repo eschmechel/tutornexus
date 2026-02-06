@@ -1,0 +1,41 @@
+{
+  "name": "tutornexus",
+  "version": "0.0.0",
+  "private": true,
+  "description": "AI-powered tutoring platform for SFU students",
+  "author": "Elliott Schmechel <elliott@tutor-nexus.com>",
+  "license": "AGPL-3.0-or-later",
+  "homepage": "https://tutor-nexus.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eschmechel/tutornexus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eschmechel/tutornexus/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "dev": "pnpm run --parallel --filter './apps/*' dev",
+    "dev:web": "pnpm --filter tutor-nexus-web dev",
+    "dev:api": "pnpm --filter tutor-nexus-api dev",
+    "dev:docs": "pnpm --filter @tutornexus/docs start",
+    "build": "pnpm run --filter './apps/*' --filter './docs' build",
+    "build:web": "pnpm --filter tutor-nexus-web build",
+    "build:api": "pnpm --filter tutor-nexus-api build",
+    "build:docs": "pnpm --filter @tutornexus/docs build",
+    "lint": "pnpm run -r lint",
+    "format": "pnpm run -r format",
+    "typecheck": "pnpm run -r typecheck",
+    "clean": "pnpm run -r clean && rm -rf node_modules",
+    "deploy:api": "pnpm --filter tutor-nexus-api deploy",
+    "deploy:docs": "pnpm --filter @tutornexus/docs deploy"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.1",
+    "turbo": "^2.5.4"
+  }
+}

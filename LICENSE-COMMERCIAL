@@ -1,0 +1,40 @@
+# Commercial License for Tutor Nexus
+
+This software is dual-licensed under the GNU Affero General Public License v3.0
+(AGPLv3) and a commercial license.
+
+## Open Source License (AGPLv3)
+
+The AGPLv3 license is suitable for open source projects and personal use.
+See the `LICENSE` file for the full license text.
+
+Key requirements of AGPLv3:
+- You must make your complete source code available if you deploy this software
+- Network use (SaaS) triggers the copyleft requirement
+- Derivative works must also be licensed under AGPLv3
+
+## Commercial License
+
+A commercial license removes the copyleft requirements of the AGPLv3 and allows
+you to:
+
+- Deploy Tutor Nexus in proprietary/closed-source applications
+- Offer Tutor Nexus as a SaaS without source disclosure
+- Integrate with proprietary systems without license conflicts
+- Receive priority support and custom feature development
+
+### Pricing
+
+Commercial licenses are available on a per-organization basis. Pricing is based
+on usage tier and support requirements.
+
+### Contact
+
+For commercial licensing inquiries:
+
+- Email: licensing@tutor-nexus.com
+- Web: https://tutor-nexus.com/licensing
+
+---
+
+Copyright (c) 2026 Elliott Schmechel and Tutor Nexus contributors.

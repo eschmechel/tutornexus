@@ -1,0 +1,11 @@
+# Funding options for Tutor Nexus
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+
+# Polar.sh - Primary subscription platform
+polar: tutornexus
+
+# Ko-fi - One-time donations
+ko_fi: tutornexus
+
+# GitHub Sponsors (when enabled)
+# github: eschmechel
