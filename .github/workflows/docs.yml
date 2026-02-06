@@ -213,26 +213,43 @@ jobs:
       - name: Deploy Preview to Cloudflare Pages
         id: deploy
         run: |
-          OUTPUT=$(npx wrangler pages deploy docs/build --project-name=tutornexus-docs --branch="${BRANCH_NAME}" --commit-dirty=true 2>&1)
-          echo "$OUTPUT"
-          # Extract the URL from wrangler output
-          URL=$(echo "$OUTPUT" | grep -oP 'https://[a-z0-9-]+\.tutornexus-docs\.pages\.dev' | head -1)
-          echo "preview_url=$URL" >> $GITHUB_OUTPUT
+          # Capture output while preserving exit code visibility
+          set +e
+          npx wrangler pages deploy docs/build \
+            --project-name=tutornexus-docs \
+            --branch="${BRANCH_NAME}" \
+            --commit-dirty=true 2>&1 | tee /tmp/wrangler-output.txt
+          DEPLOY_EXIT=${PIPESTATUS[0]}
+          set -e
+
+          if [ "$DEPLOY_EXIT" -ne 0 ]; then
+            echo "::error::Wrangler deploy failed with exit code $DEPLOY_EXIT"
+            exit "$DEPLOY_EXIT"
+          fi
+
+          # Extract the preview URL from wrangler output
+          URL=$(grep -oP 'https://[a-z0-9-]+\.tutornexus-docs\.pages\.dev' /tmp/wrangler-output.txt | head -1)
+          echo "preview_url=${URL}" >> "$GITHUB_OUTPUT"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           BRANCH_NAME: ${{ github.head_ref }}
 
       - name: Comment PR with Preview URL
+        if: success()
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
           PREVIEW_URL: ${{ steps.deploy.outputs.preview_url }}
         with:
           script: |
-            const url = process.env.PREVIEW_URL || `https://${context.payload.pull_request.head.ref}.tutornexus-docs.pages.dev`;
-            github.rest.issues.createComment({
+            const url = process.env.PREVIEW_URL;
+            if (!url) {
+              core.warning('No preview URL captured from wrangler output');
+              return;
+            }
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `**Docs preview deployed!**\n\n${url}`
-            })
+            });
